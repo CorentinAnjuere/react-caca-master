@@ -8,15 +8,15 @@ class App extends React.Component {
         this.state = {
             seriesList: [],
             seriesEpisodesList: [],
-            value:''
-        }
+            value: ''
+        };
+
         this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
     }
-
     componentDidMount() {
 
         fetch('seriesList.json',{})
@@ -32,24 +32,48 @@ class App extends React.Component {
                 alert("j'ai fait ce que j'ai pu");
             });
 
+        fetch('seriesEpisodesList.json',{})
+            .then(response => response.json())
+            .then(seriesListDepuisFichier => {
+                this.setState({seriesEpisodesList: seriesListDepuisFichier});
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     }
 
     render() {
         return (
             <div>
+                <input type="text" value={this.state.value} onChange={this.handleChange} />
+
                 <ul>
-                    {this.state.seriesList.length ?
-                        this.state.seriesList.map(item => <li key={item.id}>{item.seriesName}</li>)
-                        : <li>Loading...</li>
+                    {this.state.value !== "" ?
+
+                        this.state.seriesList.filter(
+                            a => a.seriesName.toLowerCase().trim().indexOf(this.state.value) > -1
+                        ).map(item => <li key={item.id}>{item.seriesName}
+
+                            <ul>
+                                {
+                                    this.state.seriesEpisodesList.filter(
+                                        b => b.serie_id == item.id
+                                    ).map(episode => episode.episodes_list.filter(
+                                        c => c.episodeName
+                                        ).map(name => <li>{name.episodeName}</li>)
+                                    )
+
+
+                                }
+                            </ul>
+                        </li>)
+                        : <p>Ici</p>
                     }
-                    <input type="text" value={this.state.value} onChange={this.handleChange} />
-                    <p>{this.state.value}</p>
                 </ul>
             </div>
         )
     }
 }
-
-
 export default App;
-
