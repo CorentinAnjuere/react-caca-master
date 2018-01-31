@@ -48,14 +48,16 @@ class App extends React.Component {
         return (
             <div>
                 <input type="text" value={this.state.value} onChange={this.handleChange} />
-
                 <ul>
                     {this.state.value !== "" ?
-
+                        /*
                         this.state.seriesList.filter(
-                            a => a.seriesName.toLowerCase().trim().indexOf(this.state.value) > -1
+                            a => a.seriesName.toLowerCase().trim().indexOf(this.state.value) > -1 */
+            
+                        a => a.seriesName.toLowerCase().trim().indexOf(this.state.value)
+                        this.state.seriesList.filter(
+                            a > -1
                         ).map(item => <li key={item.id}>{item.seriesName}
-
                             <ul>
                                 {
                                     this.state.seriesEpisodesList.filter(
@@ -64,8 +66,6 @@ class App extends React.Component {
                                         c => c.episodeName
                                         ).map(name => <li>{name.episodeName}</li>)
                                     )
-
-
                                 }
                             </ul>
                         </li>)
